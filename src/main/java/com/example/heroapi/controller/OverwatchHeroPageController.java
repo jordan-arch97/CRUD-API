@@ -44,6 +44,12 @@ public class OverwatchHeroPageController {
         return "index"; // no ".ftlh"
     }
 
+    // GET /about  -> templates/about.ftlh
+    @GetMapping("/about")
+    public String about() {
+        return "about";
+    }
+
     // GET /characters/{id}  -> templates/details.ftlh
     @GetMapping("/characters/{id}")
     public String details(@PathVariable("id") long id, Model model) {
