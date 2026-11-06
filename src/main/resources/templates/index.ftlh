@@ -7,7 +7,18 @@
     <p>A fan-made showcase of heroes from the Overwatch universe.</p>
   </section>
 
-  <#-- Search bar goes here in Step 5 -->
+  <!-- Search bar: a GET form, so the search ends up in the URL (/?name=...&role=...) -->
+  <form class="search-section" action="/" method="get">
+    <input type="text" name="name" placeholder="Search heroes by name..." value="${searchName!''}">
+    <select name="role">
+      <option value="">All roles</option>
+      <#list ["Damage", "Tank", "Support"] as r>
+        <option value="${r}"<#if (searchRole!'') == r> selected</#if>>${r}</option>
+      </#list>
+    </select>
+    <button class="btn" type="submit">Search</button>
+    <a class="btn btn-outline" href="/">Clear</a>
+  </form>
 
   <!-- Character Gallery -->
   <section class="section-wrap">
@@ -35,7 +46,7 @@
       </div>
     <#else>
       <div class="empty-state">
-        <p>No characters found.</p>
+        <p>No characters found. Try a different name or role.</p>
       </div>
     </#if>
   </section>

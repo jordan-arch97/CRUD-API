@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 // @Controller (not @RestController): the returned String is a TEMPLATE NAME, not JSON.
@@ -20,10 +21,16 @@ public class OverwatchHeroPageController {
         this.service = service;
     }
 
-    // GET /  -> templates/index.ftlh
+    // GET /                      -> everything
+    // GET /?name=gen&role=Damage -> filtered (either, both, or neither may be present)
     @GetMapping("/")
-    public String gallery(Model model) {
-        model.addAttribute("heroes", service.getAll());
+    public String gallery(@RequestParam(name = "name", required = false) String name,
+                          @RequestParam(name = "role", required = false) String role,
+                          Model model) {
+        model.addAttribute("heroes", service.search(name, role));
+        // Send the typed values back so the search boxes keep them after searching
+        model.addAttribute("searchName", name == null ? "" : name);
+        model.addAttribute("searchRole", role == null ? "" : role);
         return "index"; // no ".ftlh"
     }
 

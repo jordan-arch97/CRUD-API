@@ -396,3 +396,13 @@ img {
   background-color: #ffffff;
   border: 1px solid #dcdce3;
 }
+
+/* ---------- Search bar dropdown ---------- */
+
+.search-section select {
+  padding: 10px;
+  border: 1px solid #dcdce3;
+  background-color: #ffffff;
+  font-size: 15px;
+  font-family: inherit;
+}
