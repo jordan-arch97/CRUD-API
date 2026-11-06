@@ -56,7 +56,7 @@ public class OverwatchHeroPageController {
     @GetMapping("/characters/new")
     public String newForm(Model model) {
         model.addAttribute("hero", new OverwatchHero());
-        addFormSettings(model, "Add a New Hero", "/characters", "Add Hero to Gallery", "add");
+        addFormSettings(model, "Add a New Hero", "/characters", "Add Hero to Gallery", "add", "/");
         return "character-form";
     }
 
@@ -68,13 +68,48 @@ public class OverwatchHeroPageController {
                          RedirectAttributes redirect) {
         if (result.hasErrors()) {
             // Show the form again. "hero" still holds what the person typed.
-            addFormSettings(model, "Add a New Hero", "/characters", "Add Hero to Gallery", "add");
+            addFormSettings(model, "Add a New Hero", "/characters", "Add Hero to Gallery", "add", "/");
             model.addAttribute("errors", fieldErrors(result));
             return "character-form";
         }
         OverwatchHero saved = service.create(hero);
         redirect.addFlashAttribute("flash", saved.getName() + " was added");
         return "redirect:/"; // refreshing the gallery can no longer resubmit the form
+    }
+
+    // GET /characters/{id}/edit  -> same form, pre-filled with the saved values
+    @GetMapping("/characters/{id}/edit")
+    public String editForm(@PathVariable("id") long id, Model model) {
+        model.addAttribute("hero", service.getById(id)); // throws 404 if missing
+        addFormSettings(model, "Edit Hero", "/characters/" + id, "Save Changes", "", "/characters/" + id);
+        return "character-form";
+    }
+
+    // POST /characters/{id}  -> update the EXISTING hero (service copies the fields onto it), then redirect
+    @PostMapping("/characters/{id}")
+    public String update(@PathVariable("id") long id,
+                         @Valid @ModelAttribute("hero") OverwatchHero hero,
+                         BindingResult result,
+                         Model model,
+                         RedirectAttributes redirect) {
+        service.getById(id); // unknown id -> 404 page, even if the form also had errors
+        if (result.hasErrors()) {
+            addFormSettings(model, "Edit Hero", "/characters/" + id, "Save Changes", "", "/characters/" + id);
+            model.addAttribute("errors", fieldErrors(result));
+            return "character-form";
+        }
+        OverwatchHero saved = service.update(id, hero);
+        redirect.addFlashAttribute("flash", saved.getName() + " was updated");
+        return "redirect:/characters/" + id;
+    }
+
+    // POST /characters/{id}/delete  -> HTML forms can only send GET or POST, so delete is a POST
+    @PostMapping("/characters/{id}/delete")
+    public String delete(@PathVariable("id") long id, RedirectAttributes redirect) {
+        OverwatchHero hero = service.getById(id); // 404 page if it doesn't exist; also gives us the name
+        service.delete(id);
+        redirect.addFlashAttribute("flash", hero.getName() + " was removed");
+        return "redirect:/";
     }
 
     // Runs only for exceptions thrown by THIS controller's methods, so the REST
@@ -86,8 +121,10 @@ public class OverwatchHeroPageController {
         return "error";
     }
 
-    // The same form template is reused for add and edit, so these four values change per page.
-    private void addFormSettings(Model model, String title, String action, String submitLabel, String navActive) {
+    // The same form template is reused for add and edit, so these values change per page.
+    private void addFormSettings(Model model, String title, String action, String submitLabel,
+                                 String navActive, String cancelUrl) {
+        model.addAttribute("cancelUrl", cancelUrl);
         model.addAttribute("formTitle", title);
         model.addAttribute("formAction", action);
         model.addAttribute("submitLabel", submitLabel);
