@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -20,9 +22,11 @@ public class OverwatchHero {
     private long characterId;
 
     @NotBlank(message = "name is required")
+    @Size(max = 255, message = "name must be 255 characters or fewer")
     private String name;
 
     @NotBlank(message = "description is required")
+    @Size(max = 1000, message = "description must be 1000 characters or fewer")
     @Column(length = 1000)
     private String description;
 
@@ -30,9 +34,11 @@ public class OverwatchHero {
     private String role;
 
     // Extra attribute 2: the date the hero debuted (LocalDate, not java.util.Date)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // lets the form's <input type="date"> (yyyy-MM-dd) bind
     private LocalDate debutDate;
 
     // Link to the hero's picture (a web URL). Can be empty, so pages show a placeholder.
+    @Size(max = 1000, message = "image URL must be 1000 characters or fewer")
     @Column(length = 1000)
     private String imageUrl;
 
