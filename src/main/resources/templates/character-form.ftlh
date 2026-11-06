@@ -6,6 +6,7 @@
     formAction   -> where the form posts to
     submitLabel  -> button text
     navActive    -> "add" on the add page, "" on the edit page
+    cancelUrl    -> where the Cancel button goes
     errors       -> (only after a failed save) map of field name -> message
   Every input's name="" must match a property name on OverwatchHero, or the value arrives empty.
 -->
@@ -58,7 +59,7 @@
 
       <div class="form-actions">
         <button type="submit" class="btn">${submitLabel}</button>
-        <a href="/" class="btn btn-outline">Cancel</a>
+        <a href="${cancelUrl!'/'}" class="btn btn-outline">Cancel</a>
       </div>
 
     </form>

@@ -437,3 +437,18 @@ img {
   gap: 12px;
   flex-wrap: wrap;
 }
+
+/* ---------- Delete button ---------- */
+
+.btn-danger {
+  background-color: #b3261e;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background-color: #8f1d17;
+}
+
+.inline-form {
+  margin: 0;
+}

@@ -23,7 +23,12 @@
 
       <div class="page-links">
         <a href="/" class="btn">Back to Gallery</a>
-        <#-- Edit and Delete buttons get added in Step 7 -->
+        <a href="/characters/${hero.characterId?c}/edit" class="btn btn-outline">Edit</a>
+        <#-- Delete is a POST form (a link would send GET). The browser asks first; Cancel stops the submit. -->
+        <form class="inline-form" action="/characters/${hero.characterId?c}/delete" method="post"
+              onsubmit="return confirm('Delete this hero? This cannot be undone.');">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
       </div>
     </div>
 
