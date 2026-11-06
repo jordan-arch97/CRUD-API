@@ -46,6 +46,7 @@ public class OverwatchHeroService {
         existing.setDescription(updated.getDescription());
         existing.setRole(updated.getRole());
         existing.setDebutDate(updated.getDebutDate());
+        existing.setImageUrl(updated.getImageUrl());
         return repository.save(existing);
     }
 

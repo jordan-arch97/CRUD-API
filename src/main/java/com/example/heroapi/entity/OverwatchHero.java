@@ -32,6 +32,10 @@ public class OverwatchHero {
     // Extra attribute 2: the date the hero debuted (LocalDate, not java.util.Date)
     private LocalDate debutDate;
 
+    // Link to the hero's picture (a web URL). Can be empty, so pages show a placeholder.
+    @Column(length = 1000)
+    private String imageUrl;
+
     public OverwatchHero() {
         // JPA requires a no-argument constructor
     }
@@ -74,5 +78,13 @@ public class OverwatchHero {
 
     public void setDebutDate(LocalDate debutDate) {
         this.debutDate = debutDate;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
