@@ -14,4 +14,7 @@ public interface OverwatchHeroRepository extends JpaRepository<OverwatchHero, Lo
 
     // WHERE LOWER(name) LIKE LOWER('%?%')  -> partial, case-insensitive
     List<OverwatchHero> findByNameContainingIgnoreCase(String name);
+
+    // WHERE LOWER(name) LIKE LOWER('%?%') AND LOWER(role) = LOWER(?)  -> both filters at once
+    List<OverwatchHero> findByNameContainingIgnoreCaseAndRoleIgnoreCase(String name, String role);
 }

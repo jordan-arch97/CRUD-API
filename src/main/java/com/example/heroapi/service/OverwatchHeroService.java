@@ -29,6 +29,22 @@ public class OverwatchHeroService {
         return repository.findByNameContainingIgnoreCase(name);
     }
 
+    // Used by the gallery page: apply whichever filters were filled in (both, one, or none).
+    public List<OverwatchHero> search(String name, String role) {
+        boolean hasName = name != null && !name.isBlank();
+        boolean hasRole = role != null && !role.isBlank();
+        if (hasName && hasRole) {
+            return repository.findByNameContainingIgnoreCaseAndRoleIgnoreCase(name.trim(), role.trim());
+        }
+        if (hasName) {
+            return searchByName(name.trim());
+        }
+        if (hasRole) {
+            return getByRole(role.trim());
+        }
+        return getAll();
+    }
+
     public OverwatchHero getById(long id) {
         // Missing ID -> 404
         return repository.findById(id).orElseThrow(() ->
