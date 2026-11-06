@@ -406,3 +406,34 @@ img {
   font-size: 15px;
   font-family: inherit;
 }
+
+/* ---------- Form extras ---------- */
+
+.form-group input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dcdce3;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.field-error {
+  color: #b3261e;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.form-error-banner {
+  background-color: #fdecea;
+  border: 1px solid #f0b4ae;
+  color: #8a1c14;
+  font-weight: bold;
+  padding: 10px 15px;
+  margin-bottom: 18px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}

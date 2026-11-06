@@ -1,63 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add a Character - Overwatch Character Gallery</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="logo">OW <span>Hero Gallery</span></div>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="details.html">Details</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="new-character-form.html" class="active">Add a Character</a></li>
-    </ul>
-  </nav>
+<#import "layout.ftlh" as layout>
+<#--
+  One form used for BOTH add and edit. The controller sets:
+    hero         -> the object to show (empty for add, loaded for edit, or what was typed after an error)
+    formTitle    -> page heading
+    formAction   -> where the form posts to
+    submitLabel  -> button text
+    navActive    -> "add" on the add page, "" on the edit page
+    errors       -> (only after a failed save) map of field name -> message
+  Every input's name="" must match a property name on OverwatchHero, or the value arrives empty.
+-->
+<@layout.page title=formTitle active=navActive>
 
   <div class="form-wrap">
-    <h1>Add a New Hero</h1>
-    <p>Fill out the form below to add a new character to the gallery. (This form is just for show right now -- it doesn't save anything yet.)</p>
+    <h1>${formTitle}</h1>
+    <p>Fill out the form below. Name and description are required.</p>
 
-    <form class="character-form">
+    <form class="character-form" action="${formAction}" method="post">
+
+      <#if errors?has_content>
+        <div class="form-error-banner" role="alert">Please fix the problems below and try again.</div>
+      </#if>
 
       <div class="form-group">
-        <label for="hero-name">Hero Name</label>
-        <input type="text" id="hero-name" name="hero-name" placeholder="e.g. Winston">
-      </div>
-
-      <div class="form-group">
-        <label for="universe">Universe</label>
-        <input type="text" id="universe" name="universe" placeholder="e.g. Overwatch">
+        <label for="name">Hero Name</label>
+        <input type="text" id="name" name="name" placeholder="e.g. Winston" value="${hero.name!''}">
+        <#if (errors.name)??><p class="field-error">${errors.name}</p></#if>
       </div>
 
       <div class="form-group">
         <label for="role">Role</label>
         <select id="role" name="role">
           <option value="">Select a role</option>
-          <option value="damage">Damage</option>
-          <option value="tank">Tank</option>
-          <option value="support">Support</option>
+          <#list ["Damage", "Tank", "Support"] as r>
+            <option value="${r}"<#if (hero.role!'') == r> selected</#if>>${r}</option>
+          </#list>
         </select>
+        <#if (errors.role)??><p class="field-error">${errors.role}</p></#if>
       </div>
 
       <div class="form-group">
-        <label for="image-url">Image URL</label>
-        <input type="url" id="image-url" name="image-url" placeholder="https://example.com/image.png">
+        <label for="debutDate">Debut Date</label>
+        <input type="date" id="debutDate" name="debutDate" value="${(hero.debutDate)!''}">
+        <#if (errors.debutDate)??><p class="field-error">${errors.debutDate}</p></#if>
+      </div>
+
+      <div class="form-group">
+        <label for="imageUrl">Image URL</label>
+        <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.png" value="${hero.imageUrl!''}">
+        <#if (errors.imageUrl)??><p class="field-error">${errors.imageUrl}</p></#if>
       </div>
 
       <div class="form-group">
         <label for="description">Short Description</label>
-        <textarea id="description" name="description" placeholder="A quick summary of who this hero is..."></textarea>
+        <textarea id="description" name="description" placeholder="A quick summary of who this hero is...">${hero.description!''}</textarea>
+        <#if (errors.description)??><p class="field-error">${errors.description}</p></#if>
       </div>
 
-      <button type="submit" class="btn">Add Hero to Gallery</button>
+      <div class="form-actions">
+        <button type="submit" class="btn">${submitLabel}</button>
+        <a href="/" class="btn btn-outline">Cancel</a>
+      </div>
 
     </form>
   </div>
-</body>
-</html>
+
+</@layout.page>
